@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wolffe Card Studio - ระบบครอบรูป & สร้างแผ่นการ์ด 9 ช่อง</title>
+  <meta name="description" content="ระบบครอบรูปภาพการ์ดตามขนาดมาตรฐาน และจัดวางแผ่นพิมพ์การ์ด 9 ช่องพร้อมเส้นมาร์คตัด">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Outfit:wght@400;500;600;700&family=Kanit:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- แถบเมนูด้านบน (TOP NAVIGATION BAR) -->
+    <header class="top-nav">
+      <div class="nav-brand">
+        <img src="Wolffe/portrait.png" alt="Wolffe" class="nav-avatar">
+        <div class="brand-text">
+          <h1>Wolffe Card Studio</h1>
+          <p>ระบบครอบรูปภาพ & สร้างแผ่นการ์ด 9 ช่องสำหรับพิมพ์</p>
+        </div>
+      </div>
+
+      <!-- แถบแสดงขั้นตอน (STEP BREADCRUMBS) -->
+      <nav class="nav-steps">
+        <button class="step-btn active" id="navStep1" data-target="viewUpload">
+          <span class="step-num">1</span>
+          <span class="step-label">อัปโหลดรูปภาพ</span>
+        </button>
+        <span class="step-arrow">→</span>
+        <button class="step-btn" id="navStep2" data-target="viewSelect">
+          <span class="step-num">2</span>
+          <span class="step-label">เลือกโหมด</span>
+        </button>
+        <span class="step-arrow">→</span>
+        <button class="step-btn" id="navStep3" data-target="viewCropper">
+          <span class="step-num">3</span>
+          <span class="step-label" id="step3Label">ครอบรูป / แผ่นการ์ด</span>
+        </button>
+      </nav>
+
+      <div class="nav-right">
+        <div class="status-badge" id="statusBadge">
+          <span class="status-dot"></span>
+          <span id="statusText">พร้อมใช้งาน</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- พื้นที่แสดงผลแต่ละหน้า (MAIN APP CANVAS / VIEW CONTAINER) -->
+    <main class="app-main-views">
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: หน้าอัปโหลดรูปภาพ (UPLOAD IMAGE V2) -->
+      <!-- ========================================== -->
+      <section class="view-page active" id="viewUpload">
+        <div class="view-header-title">อัปโหลดรูปภาพ V2</div>
+        
+        <div class="main-card-frame">
+          <!-- กรอบอัปโหลดรูปภาพกลางหน้า -->
+          <div class="upload-dropzone-box" id="dropZone">
+            <!-- ป้าย Welcome ติดมุมโค้งซ้ายบน -->
+            <div class="frame-welcome-badge">
+              <img src="Wolffe/welcome.png" alt="Welcome Badge">
+            </div>
+
+            <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png,image/webp" class="file-input">
+            
+            <h2 class="upload-big-title">อัปโหลดรูปภาพ</h2>
+            <p class="upload-subtitle">ลากและวางรูปภาพตรงนี้ หรือคลิกเพื่อเลือกไฟล์รูปภาพ</p>
+            
+            <button class="btn btn-maroon btn-lg" id="browseBtn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+              เลือกไฟล์รูปภาพ
+            </button>
+
+            <div class="file-loaded-info hidden" id="uploadFileInfo">
+              <span id="uploadedFileName">image.png</span>
+              <button class="btn btn-gold btn-sm" id="btnNextToSelect">ไปที่หน้าเลือกโหมด →</button>
+            </div>
+            
+            <p class="upload-hint">รองรับไฟล์ JPG, PNG, WEBP (ขนาดไฟล์ไม่เกิน 20MB)</p>
+
+            <!-- ตัวละคร Chibi ติดมุมขวาล่าง -->
+            <div class="frame-chibi-br">
+              <img src="Wolffe/chibi.png" alt="Wolffe Chibi" class="floating-chibi">
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: หน้าเลือกโหมด (MODE SELECTION V2) -->
+      <!-- ========================================== -->
+      <section class="view-page hidden" id="viewSelect">
+        <div class="view-header-title">เลือกโหมดการทำงาน V2</div>
+        
+        <div class="main-card-frame">
+          <div class="selection-grid">
+            
+            <!-- การ์ดตัวเลือก 1: โหมดครอบรูป (IMAGE CROPPER) -->
+            <div class="select-mode-card" id="cardChooseCropper">
+              <h3 class="mode-card-title">โหมดครอบรูปภาพ</h3>
+              <div class="mode-card-preview cropper-preview-box">
+                <div class="mini-crop-illus">
+                  <img src="Wolffe/chibi.png" alt="Cropper Preview" class="illus-img">
+                  <div class="crop-overlay-lines"></div>
+                </div>
+              </div>
+              <p class="mode-card-desc">ครอบและจัดตำแหน่งรูปภาพเดี่ยวตามขนาดมาตรฐานการ์ด (744×1039), แบนเนอร์, ไอคอน หรือกำหนดขนาดเอง</p>
+              <button class="btn btn-maroon btn-full">เลือกโหมดครอบรูปเดี่ยว →</button>
+            </div>
+
+            <!-- การ์ดตัวเลือก 2: โหมดแผ่นการ์ด 9 ช่อง (CARD 3x3) -->
+            <div class="select-mode-card" id="cardChooseSheet">
+              <h3 class="mode-card-title">โหมดแผ่นการ์ด 9 ช่อง</h3>
+              <div class="mode-card-preview sheet-preview-box">
+                <div class="mini-grid-3x3">
+                  <div class="mini-slot"></div><div class="mini-slot"></div><div class="mini-slot"></div>
+                  <div class="mini-slot"></div><div class="mini-slot"></div><div class="mini-slot"></div>
+                  <div class="mini-slot"></div><div class="mini-slot"></div><div class="mini-slot"></div>
+                </div>
+              </div>
+              <p class="mode-card-desc">จัดวางรูปภาพ 9 การ์ดลงในแผ่นพิมพ์ตาราง 3×3 พร้อมเส้นมาร์คตัดมุมและเส้นประขอบตัดสำหรับตัดการ์ด</p>
+              <button class="btn btn-maroon btn-full">เลือกโหมดแผ่นการ์ด 9 ช่อง →</button>
+            </div>
+
+          </div>
+
+          <div class="view-actions-bottom">
+            <button class="btn btn-secondary" id="btnBackToUpload">← กลับไปหน้าอัปโหลด</button>
+          </div>
+
+          <!-- ตัวละคร Chibi มุมขวาล่าง -->
+          <div class="frame-chibi-br">
+            <img src="Wolffe/chibi.png" alt="Wolffe Chibi" class="floating-chibi">
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: หน้าครอบรูปเดี่ยว (IMAGE CROPPER V2) -->
+      <!-- ========================================== -->
+      <section class="view-page hidden" id="viewCropper">
+        <div class="view-header-title">โหมดครอบรูปภาพ V2</div>
+        
+        <div class="main-card-frame">
+          <div class="frame-inner-header">
+            <h2 class="frame-main-title">ระบบครอบรูปเดี่ยว</h2>
+            <div class="frame-header-nav">
+              <button class="btn btn-secondary btn-sm" id="btnCropperToSelect">← เลือกโหมด</button>
+              <button class="btn btn-maroon btn-sm" id="btnSwitchToCard">สลับไปโหมดแผ่นการ์ด →</button>
+            </div>
+          </div>
+
+          <!-- เลย์เอาต์ 2 คอลัมน์ (STUDIO TWO-COL) -->
+          <div class="studio-two-col">
+            
+            <!-- คอลัมน์ซ้าย: โซนตั้งค่า (OPTION ZONE) -->
+            <div class="zone-box option-zone">
+              <h3 class="zone-title">โซนตั้งค่า (OPTION)</h3>
+
+              <!-- ข้อมูลไฟล์และการเปลี่ยนรูป -->
+              <div class="option-card">
+                <div class="file-info-header">
+                  <span class="file-name-tag" id="fileNameDisplay">image.png</span>
+                  <span class="file-meta-tag" id="fileMetaDisplay">744×1039 px</span>
+                </div>
+                <button class="btn btn-secondary btn-full btn-sm" id="changeImageBtn">เปลี่ยนไฟล์รูปภาพ</button>
+              </div>
+
+              <!-- ขนาดพรีเซ็ตรูปภาพ -->
+              <div class="option-card">
+                <label class="option-label">ขนาดรูปภาพที่ตั้งไว้</label>
+                <div class="preset-grid">
+                  <button class="preset-btn active" data-preset="card" id="presetCardBtn">
+                    <span class="preset-name">รูปการ์ด</span>
+                    <span class="preset-size">744 × 1039</span>
+                  </button>
+                  <button class="preset-btn" data-preset="banner" id="presetBannerBtn">
+                    <span class="preset-name">แบนเนอร์</span>
+                    <span class="preset-size">1200 × 400</span>
+                  </button>
+                  <button class="preset-btn" data-preset="icon" id="presetIconBtn">
+                    <span class="preset-name">รูปไอคอน</span>
+                    <span class="preset-size">512 × 512</span>
+                  </button>
+                  <button class="preset-btn" data-preset="custom" id="presetCustomBtn">
+                    <span class="preset-name">กำหนดเอง</span>
+                    <span class="preset-size">ระบุขนาด</span>
+                  </button>
+                </div>
+
+                <div class="custom-size-box hidden" id="customSizeBox">
+                  <div class="custom-inputs">
+                    <input type="number" id="customWidthInput" min="1" max="5000" placeholder="ความกว้าง" value="800">
+                    <span>×</span>
+                    <input type="number" id="customHeightInput" min="1" max="5000" placeholder="ความสูง" value="600">
+                  </div>
+                  <button class="btn btn-secondary btn-full btn-sm" id="applyCustomSizeBtn">นำขนาดที่กำหนดเองไปใช้</button>
+                </div>
+              </div>
+
+              <!-- เครื่องมือซูม -->
+              <div class="option-card">
+                <div class="option-row-flex">
+                  <label class="option-label">ระดับการซูม</label>
+                  <span class="zoom-value" id="zoomValueDisplay">1.0x</span>
+                </div>
+                <div class="zoom-control-row">
+                  <button class="btn btn-icon" id="zoomOutBtn" title="ซูมออก">-</button>
+                  <input type="range" id="zoomSlider" min="1.0" max="5.0" step="0.05" value="1.0" class="slider">
+                  <button class="btn btn-icon" id="zoomInBtn" title="ซูมเข้า">+</button>
+                </div>
+              </div>
+
+              <!-- เครื่องมือจัดตำแหน่ง -->
+              <div class="option-card">
+                <label class="option-label">การจัดตำแหน่งรูป</label>
+                <div class="pos-btn-grid">
+                  <button class="btn btn-secondary btn-sm" id="centerHBtn">กึ่งกลางแนวนอน</button>
+                  <button class="btn btn-secondary btn-sm" id="centerVBtn">กึ่งกลางแนวตั้ง</button>
+                  <button class="btn btn-secondary btn-sm" id="centerImageBtn">กึ่งกลางทั้งหมด</button>
+                </div>
+              </div>
+
+              <!-- ฟอร์แมตและคุณภาพไฟล์ -->
+              <div class="option-card">
+                <label class="option-label">ฟอร์แมตไฟล์บันทึก</label>
+                <div class="format-options">
+                  <label class="format-radio">
+                    <input type="radio" name="outputFormat" value="png" checked>
+                    <span class="radio-pill">PNG</span>
+                  </label>
+                  <label class="format-radio">
+                    <input type="radio" name="outputFormat" value="jpg">
+                    <span class="radio-pill">JPG</span>
+                  </label>
+                  <label class="format-radio">
+                    <input type="radio" name="outputFormat" value="webp">
+                    <span class="radio-pill">WEBP</span>
+                  </label>
+                </div>
+
+                <div class="quality-box hidden" id="qualityBox">
+                  <div class="option-row-flex">
+                    <label>คุณภาพรูปภาพ</label>
+                    <span id="qualityValueDisplay">90%</span>
+                  </div>
+                  <input type="range" id="qualitySlider" min="80" max="100" step="1" value="90" class="slider">
+                </div>
+              </div>
+
+              <!-- ปุ่มการทำงานหลัก (CTA ACTIONS) -->
+              <div class="option-actions">
+                <button class="btn btn-maroon btn-full btn-lg" id="cropDownloadBtn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  ครอบรูป & ดาวน์โหลดรูปเดี่ยว
+                </button>
+                <button class="btn btn-secondary btn-full" id="addToSheetBtn">
+                  + เพิ่มรูปที่ครอบลงตาราง 9 ช่อง
+                </button>
+                <button class="btn btn-ghost btn-full" id="resetBtn">รีเซ็ตการซูมและตำแหน่ง</button>
+              </div>
+
+              <!-- ตัวละคร Chibi มุมซ้ายล่างโซนตั้งค่า -->
+              <div class="option-chibi-bl">
+                <img src="Wolffe/chibi.png" alt="Wolffe Chibi" class="floating-chibi">
+              </div>
+            </div>
+
+            <!-- คอลัมน์ขวา: โซนแสดงรูปครอบ (CROPPER ZONE) -->
+            <div class="zone-box cropper-zone">
+              <h3 class="zone-title">โซนครอบรูป (Cropper)</h3>
+
+              <div class="preview-viewport" id="previewViewport">
+                <div class="crop-frame hidden" id="cropFrame">
+                  <img id="previewImage" src="" alt="Crop Preview" draggable="false">
+                  <div class="crop-grid-overlay">
+                    <div class="grid-line line-h1"></div>
+                    <div class="grid-line line-h2"></div>
+                    <div class="grid-line line-v1"></div>
+                    <div class="grid-line line-v2"></div>
+                  </div>
+                </div>
+
+                <div class="no-image-placeholder" id="noImagePlaceholder">
+                  <p>ยังไม่ได้เลือกรูปภาพ</p>
+                  <button class="btn btn-maroon btn-sm" id="btnUploadInCropper">เลือกไฟล์รูปภาพ</button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: หน้าแผ่นการ์ด 9 ช่อง (CARD V2) -->
+      <!-- ========================================== -->
+      <section class="view-page hidden" id="viewCard">
+        <div class="view-header-title">โหมดแผ่นการ์ด V2</div>
+        
+        <div class="main-card-frame">
+          <div class="frame-inner-header">
+            <h2 class="frame-main-title">ระบบแผ่นการ์ด 9 ช่อง</h2>
+            <div class="frame-header-nav">
+              <button class="btn btn-secondary btn-sm" id="btnCardToSelect">← เลือกโหมด</button>
+              <button class="btn btn-maroon btn-sm" id="btnSwitchToCropper">สลับไปโหมดครอบรูป →</button>
+            </div>
+          </div>
+
+          <!-- เลย์เอาต์ 2 คอลัมน์ (STUDIO TWO-COL) -->
+          <div class="studio-two-col">
+            
+            <!-- คอลัมน์ซ้าย: โซนตั้งค่า (OPTION ZONE) -->
+            <div class="zone-box option-zone">
+              <h3 class="zone-title">โซนตั้งค่า (OPTION)</h3>
+
+              <div class="option-card">
+                <div class="option-row-flex">
+                  <label class="option-label">สถานะตาราง 3×3</label>
+                  <span class="status-pill-badge" id="sheetSlotStatus">0 จาก 9 ช่อง</span>
+                </div>
+              </div>
+
+              <!-- เครื่องมือด่วนจัดการช่องการ์ด -->
+              <div class="option-card">
+                <label class="option-label">เครื่องมือด่วน</label>
+                <div class="card-action-stack">
+                  <button class="btn btn-secondary btn-full" id="fillAllSheetBtn">
+                    คัดลอกรูปที่ครอบลงเต็มทั้ง 9 ช่อง
+                  </button>
+                  <button class="btn btn-ghost btn-full btn-danger-text" id="clearAllSlotsBtn">
+                    ล้างข้อมูลรูปภาพทุกช่อง
+                  </button>
+                </div>
+              </div>
+
+              <!-- เครื่องมือมาร์คเส้นตัด -->
+              <div class="option-card">
+                <label class="option-label">เส้นมาร์คสำหรับตัด</label>
+                <div class="checkbox-stack">
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="toggleCornerMarks" checked>
+                    <span>เส้นมาร์คตัดมุม (Corner Cut Marks)</span>
+                  </label>
+                  <label class="checkbox-label">
+                    <input type="checkbox" id="toggleDashedBorders" checked>
+                    <span>เส้นประขอบตัด (Dashed Cut Lines)</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- ฟอร์แมตไฟล์บันทึก -->
+              <div class="option-card">
+                <label class="option-label">ฟอร์แมตไฟล์บันทึก</label>
+                <div class="format-options">
+                  <label class="format-radio">
+                    <input type="radio" name="sheetFormat" value="png" checked>
+                    <span class="radio-pill">PNG</span>
+                  </label>
+                  <label class="format-radio">
+                    <input type="radio" name="sheetFormat" value="jpg">
+                    <span class="radio-pill">JPG</span>
+                  </label>
+                  <label class="format-radio">
+                    <input type="radio" name="sheetFormat" value="webp">
+                    <span class="radio-pill">WEBP</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- ปุ่มดาวน์โหลดและพิมพ์หลัก -->
+              <div class="option-actions">
+                <button class="btn btn-maroon btn-full btn-lg" id="downloadSheetBtn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                    <polyline points="7 10 12 15 17 10"/>
+                    <line x1="12" y1="15" x2="12" y2="3"/>
+                  </svg>
+                  ดาวน์โหลดรูปแผ่นการ์ด 9 ช่อง
+                </button>
+                
+                <button class="btn btn-gold btn-full btn-lg" id="printSheetBtn">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 6 2 18 2 18 9"/>
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                    <rect x="6" y="14" width="12" height="8"/>
+                  </svg>
+                  พิมพ์แผ่นการ์ด 9 ช่อง (พร้อมตัด)
+                </button>
+              </div>
+
+              <!-- ตัวละคร Chibi มุมซ้ายล่างโซนตั้งค่า -->
+              <div class="option-chibi-bl">
+                <img src="Wolffe/chibi.png" alt="Wolffe Chibi" class="floating-chibi">
+              </div>
+            </div>
+
+            <!-- คอลัมน์ขวา: โซนตารางการ์ด 3x3 -->
+            <div class="zone-box card-preview-zone">
+              <h3 class="zone-title">ตัวอย่างแผ่นการ์ด (ตาราง 3×3)</h3>
+
+              <div class="printable-sheet-preview" id="printableSheetArea">
+                <div class="sheet-grid-3x3" id="sheetGrid3x3">
+                  <!-- 9 Card Slots rendered by JS UI engine -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+  </div>
+
+  <!-- HIDDEN FILE INPUT FOR INDIVIDUAL SLOT UPLOADS -->
+  <input type="file" id="slotFileInput" accept="image/jpeg,image/jpg,image/png,image/webp" style="display:none">
+
+  <script src="js/cropper.js"></script>
+  <script src="js/cardSheet.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
